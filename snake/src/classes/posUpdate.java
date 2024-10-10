@@ -14,12 +14,8 @@ public class posUpdate implements Runnable {
     public posUpdate(JTable table, AtomicInteger dir) {
         this.table = table;
         this.dir = dir;
-        partList.add(new bodyPart(16,16));
-        partList.add(new bodyPart(15,16));
-        partList.add(new bodyPart(14,16));
-        partList.add(new bodyPart(13,16));
-        partList.add(new bodyPart(12,16));
-        partList.add(new bodyPart(11,16));
+
+        DEBUGsnakeLen(20);
     }
 
     @Override
@@ -86,6 +82,12 @@ public class posUpdate implements Runnable {
             temp.decreaseY();
             partList.addFirst(temp);
 
+        }
+    }
+
+    void DEBUGsnakeLen(int len){
+        for (int i = 0; i < len; i++) {
+            partList.add(new bodyPart(32 - i,16));
         }
     }
 }

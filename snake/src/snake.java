@@ -2,6 +2,7 @@ import classes.getKeys;
 import classes.posUpdate;
 
 import javax.swing.*;
+import java.awt.event.MouseListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class snake extends JDialog {
@@ -15,6 +16,12 @@ public class snake extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        setResizable(false);
+
+        for (MouseListener mouseListener : table1.getMouseListeners()) {
+            table1.removeMouseListener(mouseListener);
+        }
+
 
         buttonOK.addActionListener(_ -> {
 
@@ -40,7 +47,10 @@ public class snake extends JDialog {
         snake dialog = new snake();
         dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);}
+        System.exit(0);
+
+    }
+
 
 
     private void createUIComponents() {
