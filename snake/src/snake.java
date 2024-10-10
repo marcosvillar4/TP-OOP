@@ -2,53 +2,31 @@ import classes.getKeys;
 import classes.posUpdate;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class snake extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
-    private JButton buttonCancel;
     protected JTable table1;
 
     AtomicInteger dir;
 
-    public snake() throws InterruptedException {
+    public snake() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        /*
 
+        buttonOK.addActionListener(_ -> {
 
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
+            dir = new AtomicInteger();
+            dir.set(2);
 
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("AAAAAAA");
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+            Thread posUpdate = new Thread(new posUpdate(table1, dir));
+            Thread getKeys = new Thread(new getKeys(dir, contentPane));
 
-        */
+            posUpdate.start();
+            getKeys.start();
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dir = new AtomicInteger();
-                dir.set(2);
-
-                Thread posUpdate = new Thread(new posUpdate(table1, dir));
-                Thread getKeys = new Thread(new getKeys(dir, contentPane));
-
-                posUpdate.start();
-                getKeys.start();
-
-            }
         });
 
 
@@ -56,16 +34,9 @@ public class snake extends JDialog {
 
     }
 
-    private void onOK() throws InterruptedException {
 
-    }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         snake dialog = new snake();
         dialog.pack();
         dialog.setVisible(true);
