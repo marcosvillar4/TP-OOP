@@ -2,16 +2,16 @@ package classes;
 
 import javax.swing.*;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class posUpdate implements Runnable {
 
     JTable table;
     LinkedList<bodyPart> partList = new LinkedList<>();
 
-    int len;
-    Integer dir = 0; // Direccion de la serpiente, 0 = N, 1 = S, 2 = W, 3 = E
+    AtomicInteger dir; // Direccion de la serpiente, 0 = S, 1 = N, 2 = E, 3 = W
 
-    public posUpdate(JTable table, Integer dir) {
+    public posUpdate(JTable table, AtomicInteger dir) {
         this.table = table;
         this.dir = dir;
         partList.add(new bodyPart(16,16));
@@ -37,8 +37,7 @@ public class posUpdate implements Runnable {
                 throw new RuntimeException(e);
             }
 
-            //partList.get(0).increaseX();
-            //partList.get(1).increaseX();
+
             table.update(table.getGraphics());
 
         }
@@ -59,28 +58,34 @@ public class posUpdate implements Runnable {
     }
 
     void fwd(){
-        if (dir == 0){
+        if (dir.get() == 0){
 
             partList.removeLast();
             bodyPart temp = new bodyPart(partList.getFirst().x, partList.getFirst().y);
             temp.increaseX();
             partList.addFirst(temp);
 
-        } else if (dir == 1){
+        } else if (dir.get() == 1){
+
             partList.removeLast();
             bodyPart temp = new bodyPart(partList.getFirst().x, partList.getFirst().y);
-            temp.decreaseY();
+            temp.decreaseX();
             partList.addFirst(temp);
-        } else if (dir == 2){
+
+        } else if (dir.get() == 2){
+
             partList.removeLast();
             bodyPart temp = new bodyPart(partList.getFirst().x, partList.getFirst().y);
             temp.increaseY();
             partList.addFirst(temp);
-        } else if (dir == 3){
+
+        } else if (dir.get() == 3){
+
             partList.removeLast();
             bodyPart temp = new bodyPart(partList.getFirst().x, partList.getFirst().y);
             temp.decreaseY();
             partList.addFirst(temp);
+
         }
     }
 }

@@ -3,6 +3,7 @@ import classes.posUpdate;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class snake extends JDialog {
     private JPanel contentPane;
@@ -10,7 +11,7 @@ public class snake extends JDialog {
     private JButton buttonCancel;
     protected JTable table1;
 
-    Integer dir = 2;
+    AtomicInteger dir;
 
     public snake() throws InterruptedException {
         setContentPane(contentPane);
@@ -38,10 +39,11 @@ public class snake extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                dir = new AtomicInteger();
+                dir.set(2);
 
                 Thread posUpdate = new Thread(new posUpdate(table1, dir));
-                Thread getKeys = new Thread(new getKeys(dir));
+                Thread getKeys = new Thread(new getKeys(dir, contentPane));
 
                 posUpdate.start();
                 getKeys.start();
