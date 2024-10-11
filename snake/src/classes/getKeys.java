@@ -45,6 +45,15 @@ public class getKeys implements Runnable{
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
+        // DEBUG FUNCS
+
+        frame.registerKeyboardAction(_ -> {
+
+            dir.set(5);
+            System.out.println(dir);
+
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
 
     }
 }
