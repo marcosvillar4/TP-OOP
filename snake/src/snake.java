@@ -13,10 +13,10 @@ public class snake extends JDialog {
     protected JTable table1;
     private JLabel Score;
 
-    AtomicInteger dir = new AtomicInteger(0);
+    AtomicBoolean kill = new AtomicBoolean(false);
+    AtomicInteger dir;
 
-    Thread posUpdate = new Thread(new posUpdate(table1, dir, Score));
-    Thread getKeys = new Thread(new getKeys(dir, contentPane));
+
     //Thread uiUpdate = new Thread(new uiUpdate(Score, len));
 
 
@@ -34,17 +34,19 @@ public class snake extends JDialog {
 
         buttonOK.addActionListener(_ -> {
 
-            if (!posUpdate.isAlive()) {
-
+            if (!kill.get()) {
+                kill.set(true);
+                dir = new AtomicInteger(0);
                 dir.set(2);
+                Thread posUpdate = new Thread(new posUpdate(table1, dir, Score, kill));
+                Thread getKeys = new Thread(new getKeys(dir, contentPane));
 
-                //uiUpdate.start();
-                posUpdate.start();
+
                 getKeys.start();
+                posUpdate.start();
 
-                getKeys.interrupt();
-                //uiUpdate.interrupt();
             }
+
 
 
         });
@@ -68,8 +70,6 @@ public class snake extends JDialog {
 
     private void createUIComponents() {
         table1 = new JTable(32,32);
-
-
     }
 }
 

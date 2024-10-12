@@ -12,6 +12,7 @@ public class uiUpdate implements Runnable{
     JLabel scoreLabel;
     AtomicInteger len;
 
+
     int len2 = 0;
 
     public uiUpdate(JLabel scoreLabel, AtomicInteger len) {

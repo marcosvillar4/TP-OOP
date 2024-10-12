@@ -12,13 +12,13 @@ public class posUpdate implements Runnable {
 
     AtomicInteger dir; // Direccion de la serpiente, 0 = S, 1 = N, 2 = E, 3 = W
     JLabel label;
+    AtomicBoolean kill;
 
 
-    public posUpdate(JTable table, AtomicInteger dir, JLabel DEBUGLABEL) {
+    public posUpdate(JTable table, AtomicInteger dir, JLabel DEBUGLABEL, AtomicBoolean kill) {
         this.table = table;
         this.dir = dir;
-
-
+        this.kill = kill;
         label = DEBUGLABEL;
         DEBUGsnakeLen(20);
     }
@@ -43,10 +43,12 @@ public class posUpdate implements Runnable {
 
 
             if (partList.getFirst().x == 0 || partList.getFirst().x == 32){
+                kill.set(false);
                 Thread.currentThread().interrupt();
                 return;
             }
             if (partList.getFirst().y == 0 || partList.getFirst().y == 32){
+                kill.set(false);
                 Thread.currentThread().interrupt();
                 return;
             }
