@@ -11,15 +11,13 @@ public class posUpdate implements Runnable {
     LinkedList<bodyPart> partList = new LinkedList<>();
 
     AtomicInteger dir; // Direccion de la serpiente, 0 = S, 1 = N, 2 = E, 3 = W
-    AtomicInteger len;
-
     JLabel label;
 
 
-    public posUpdate(JTable table, AtomicInteger dir, AtomicInteger len, JLabel DEBUGLABEL) {
+    public posUpdate(JTable table, AtomicInteger dir, JLabel DEBUGLABEL) {
         this.table = table;
         this.dir = dir;
-        this.len = len;
+
 
         label = DEBUGLABEL;
         DEBUGsnakeLen(20);
@@ -42,7 +40,8 @@ public class posUpdate implements Runnable {
 
 
             table.update(table.getGraphics());
-            len.set(partList.size());
+
+
             if (partList.getFirst().x == 0 || partList.getFirst().x == 32){
                 Thread.currentThread().interrupt();
                 return;

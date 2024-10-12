@@ -13,9 +13,13 @@ public class snake extends JDialog {
     protected JTable table1;
     private JLabel Score;
 
-    AtomicInteger dir;
-    AtomicInteger len;
-    AtomicBoolean colision;
+    AtomicInteger dir = new AtomicInteger(0);
+
+    Thread posUpdate = new Thread(new posUpdate(table1, dir, Score));
+    Thread getKeys = new Thread(new getKeys(dir, contentPane));
+    //Thread uiUpdate = new Thread(new uiUpdate(Score, len));
+
+
 
     public snake() {
         setContentPane(contentPane);
@@ -30,23 +34,18 @@ public class snake extends JDialog {
 
         buttonOK.addActionListener(_ -> {
 
-            dir = new AtomicInteger();
-            len = new AtomicInteger();
-            colision = new AtomicBoolean(false);
-            dir.set(2);
-            len.set(0);
+            if (!posUpdate.isAlive()) {
 
-            Thread posUpdate = new Thread(new posUpdate(table1, dir, len, Score));
-            Thread getKeys = new Thread(new getKeys(dir, contentPane));
-            //Thread uiUpdate = new Thread(new uiUpdate(Score, len));
+                dir.set(2);
 
-            //uiUpdate.start();
-            posUpdate.start();
-            getKeys.start();
+                //uiUpdate.start();
+                posUpdate.start();
+                getKeys.start();
 
+                getKeys.interrupt();
+                //uiUpdate.interrupt();
+            }
 
-            getKeys.interrupt();
-            //uiUpdate.interrupt();
 
         });
 
@@ -69,6 +68,8 @@ public class snake extends JDialog {
 
     private void createUIComponents() {
         table1 = new JTable(32,32);
+
+
     }
 }
 
