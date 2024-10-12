@@ -4,6 +4,7 @@ import classes.uiUpdate;
 
 import javax.swing.*;
 import java.awt.event.MouseListener;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class snake extends JDialog {
@@ -14,6 +15,7 @@ public class snake extends JDialog {
 
     AtomicInteger dir;
     AtomicInteger len;
+    AtomicBoolean colision;
 
     public snake() {
         setContentPane(contentPane);
@@ -30,16 +32,21 @@ public class snake extends JDialog {
 
             dir = new AtomicInteger();
             len = new AtomicInteger();
+            colision = new AtomicBoolean(false);
             dir.set(2);
             len.set(0);
 
-            Thread posUpdate = new Thread(new posUpdate(table1, dir, len));
+            Thread posUpdate = new Thread(new posUpdate(table1, dir, len, Score));
             Thread getKeys = new Thread(new getKeys(dir, contentPane));
-            Thread uiUpdate = new Thread(new uiUpdate(Score, len));
+            //Thread uiUpdate = new Thread(new uiUpdate(Score, len));
 
+            //uiUpdate.start();
             posUpdate.start();
             getKeys.start();
-            uiUpdate.start();
+
+
+            getKeys.interrupt();
+            //uiUpdate.interrupt();
 
         });
 

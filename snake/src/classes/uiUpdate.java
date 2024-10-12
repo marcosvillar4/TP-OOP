@@ -2,12 +2,17 @@ package classes;
 
 import javax.swing.*;
 
+import java.net.http.WebSocket;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class uiUpdate implements Runnable{
 
     JLabel scoreLabel;
     AtomicInteger len;
+
+    int len2 = 0;
 
     public uiUpdate(JLabel scoreLabel, AtomicInteger len) {
         this.scoreLabel = scoreLabel;
@@ -16,11 +21,12 @@ public class uiUpdate implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-            if (!String.valueOf(len.get()).equals(scoreLabel.getText())){
-                scoreLabel.setText(String.valueOf(len.get()));
+        while (true) {
+            if (!Objects.equals(len.toString(), scoreLabel.getText())) {
+                scoreLabel.setText(len.toString());
                 scoreLabel.update(scoreLabel.getGraphics());
             }
         }
     }
 }
+

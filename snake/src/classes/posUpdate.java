@@ -2,6 +2,7 @@ package classes;
 
 import javax.swing.*;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class posUpdate implements Runnable {
@@ -12,10 +13,15 @@ public class posUpdate implements Runnable {
     AtomicInteger dir; // Direccion de la serpiente, 0 = S, 1 = N, 2 = E, 3 = W
     AtomicInteger len;
 
-    public posUpdate(JTable table, AtomicInteger dir, AtomicInteger len) {
+    JLabel label;
+
+
+    public posUpdate(JTable table, AtomicInteger dir, AtomicInteger len, JLabel DEBUGLABEL) {
         this.table = table;
         this.dir = dir;
         this.len = len;
+
+        label = DEBUGLABEL;
         DEBUGsnakeLen(20);
     }
 
@@ -37,6 +43,15 @@ public class posUpdate implements Runnable {
 
             table.update(table.getGraphics());
             len.set(partList.size());
+            if (partList.getFirst().x == 0 || partList.getFirst().x == 32){
+                Thread.currentThread().interrupt();
+                return;
+            }
+            if (partList.getFirst().y == 0 || partList.getFirst().y == 32){
+                Thread.currentThread().interrupt();
+                return;
+            }
+
 
 
         }
@@ -63,6 +78,7 @@ public class posUpdate implements Runnable {
             bodyPart temp = new bodyPart(partList.getFirst().x, partList.getFirst().y);
             temp.increaseX();
             partList.addFirst(temp);
+
 
         } else if (dir.get() == 1){
 
@@ -93,9 +109,11 @@ public class posUpdate implements Runnable {
 
             partList.add(partList.getLast());
             dir.set(1);
-
+            label.setText(String.valueOf(partList.size()));
 
         }
+
+
 
 
     }
@@ -103,6 +121,7 @@ public class posUpdate implements Runnable {
     void DEBUGsnakeLen(int len){
         for (int i = 0; i < len; i++) {
             partList.add(new bodyPart(31 - i,16));
+            label.setText(String.valueOf(partList.size()));
         }
     }
 }
