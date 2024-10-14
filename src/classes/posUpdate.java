@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class posUpdate implements Runnable {
 
+
     JTable table;
     LinkedList<bodyPart> partList = new LinkedList<>();
 
