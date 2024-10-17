@@ -16,26 +16,32 @@ public class posUpdate implements Runnable {
     JLabel label;
     AtomicBoolean kill;
 
-    bodyPart fruta = new bodyPart(16,16);
+    bodyPart fruta;
 
     Random rand = new Random();
 
-    public posUpdate(JTable table, AtomicInteger dir, JLabel DEBUGLABEL, AtomicBoolean kill) {
+    static int gridSize;
+
+    public posUpdate(JTable table, AtomicInteger dir, JLabel DEBUGLABEL, AtomicBoolean kill, int GridSize) {
         this.table = table;
         this.dir = dir;
         this.kill = kill;
         label = DEBUGLABEL;
         //DEBUGsnakeLen(3);
+        gridSize = GridSize;
 
-
-        partList.add(new bodyPart(16,6));
-        partList.add(new bodyPart(16,5));
-        partList.add(new bodyPart(16,4));
+        partList.add(new bodyPart(gridSize/2,4));
+        partList.add(new bodyPart(gridSize/2,3));
+        partList.add(new bodyPart(gridSize/2,2));
+        fruta = new bodyPart((gridSize/2),(gridSize/2));
     }
 
     @Override
     public void run() {
         while (true){
+
+
+
 
             clearTable();
             fwd();
@@ -43,7 +49,7 @@ public class posUpdate implements Runnable {
 
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(100);  // Se utiliza para definir intervalo entre cuadro "MSPF"
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -51,27 +57,39 @@ public class posUpdate implements Runnable {
 
             table.update(table.getGraphics());
 
-            if (partList.getFirst().x == 0 || partList.getFirst().x == 32){
-                kill.set(false);
-                Thread.currentThread().interrupt();
-                return;
-            }
-            if (partList.getFirst().y == 0 || partList.getFirst().y == 32){
-                kill.set(false);
-                Thread.currentThread().interrupt();
-                return;
-            }
-            for (int i = 1; i < partList.size(); i++) {
-                if (partList.getFirst().x == partList.get(i).x && partList.getFirst().y == partList.get(i).y){
-                    kill.set(false);
-                    Thread.currentThread().interrupt();
 
-                    label.update(label.getGraphics());
-                    return;
-                }
-            }
+            if (wallCol()) return;
+
+            if (selfCol()) return;
 
         }
+    }
+
+    private boolean selfCol() {
+        for (int i = 1; i < partList.size(); i++) {
+            if (partList.getFirst().x == partList.get(i).x && partList.getFirst().y == partList.get(i).y){
+                kill.set(false);
+                Thread.currentThread().interrupt();
+
+                label.update(label.getGraphics());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean wallCol() {
+        if (partList.getFirst().x == 0 || partList.getFirst().x == gridSize){
+            kill.set(false);
+            Thread.currentThread().interrupt();
+            return true;
+        }
+        if (partList.getFirst().y == 0 || partList.getFirst().y == gridSize){
+            kill.set(false);
+            Thread.currentThread().interrupt();
+            return true;
+        }
+        return false;
     }
 
     void clearTable(){
@@ -104,11 +122,7 @@ public class posUpdate implements Runnable {
             temp.increaseX();
             partList.addFirst(temp);
 
-            if (partList.getFirst().x == fruta.x && partList.getFirst().y == fruta.y){
-                partList.add(addPart);
-                label.setText(String.valueOf(partList.size()));
-                fruitGen();
-            }
+            colFruta(addPart);
 
 
         } else if (dir.get() == 1){
@@ -118,11 +132,7 @@ public class posUpdate implements Runnable {
             temp.decreaseX();
             partList.addFirst(temp);
 
-            if (partList.getFirst().x == fruta.x && partList.getFirst().y == fruta.y){
-                partList.add(addPart);
-                label.setText(String.valueOf(partList.size()));
-                fruitGen();
-            }
+            colFruta(addPart);
 
 
         } else if (dir.get() == 2){
@@ -132,11 +142,7 @@ public class posUpdate implements Runnable {
             temp.increaseY();
             partList.addFirst(temp);
 
-            if (partList.getFirst().x == fruta.x && partList.getFirst().y == fruta.y){
-                partList.add(addPart);
-                label.setText(String.valueOf(partList.size()));
-                fruitGen();
-            }
+            colFruta(addPart);
 
         } else if (dir.get() == 3){
 
@@ -145,44 +151,39 @@ public class posUpdate implements Runnable {
             temp.decreaseY();
             partList.addFirst(temp);
 
-            if (partList.getFirst().x == fruta.x && partList.getFirst().y == fruta.y){
-                partList.add(addPart);
-                label.setText(String.valueOf(partList.size()));
-                fruitGen();
-            }
-
-
+            colFruta(addPart);
 
         }
 
+
+
+
+
         // DEBUG FUNCS
 
-        else if (dir.get() == 5) {
+        /*else if (dir.get() == 5) {
 
             partList.add(partList.getLast());
             dir.set(1);
 
-
-
-
-        }
-
-
-
+        }*/
 
     }
 
-    void DEBUGsnakeLen(int len){
-        for (int i = 0; i < len; i++) {
-            partList.add(new bodyPart(31 - i,16));
+    private void colFruta(bodyPart addPart) {
+        if (partList.getFirst().x == fruta.x && partList.getFirst().y == fruta.y){
+            partList.add(addPart);
             label.setText(String.valueOf(partList.size()));
+            fruitGen();
         }
     }
+
+
 
     void fruitGen(){
         boolean check = false;
-        int x = rand.nextInt(0,32);
-        int y = rand.nextInt(0,32);
+        int x = rand.nextInt(0,gridSize);
+        int y = rand.nextInt(0,gridSize);
 
         for (bodyPart bodyPart : partList) {
             if (x == bodyPart.x){
