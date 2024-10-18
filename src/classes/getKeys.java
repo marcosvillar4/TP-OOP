@@ -8,6 +8,7 @@ public class getKeys implements Runnable{
 
     AtomicInteger dir;
     JPanel frame;
+
     public getKeys(AtomicInteger dir, JPanel frame) {
         this.dir = dir;
         this.frame = frame;
@@ -53,6 +54,10 @@ public class getKeys implements Runnable{
             System.out.println(dir);
 
         }, KeyStroke.getKeyStroke(KeyEvent.VK_E, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+
+
+
 
 
     }
