@@ -17,7 +17,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         inicializarJuego();
 
         serpiente = new Serpiente(new Point(Juego.WIDTH / 2, Juego.HEIGHT / 2), Color.BLACK);
-        comida = new Comida(Color.RED, Juego.WIDTH, Juego.HEIGHT);
+        comida = new Comida(Color.RED, "C:\\Users\\alu603\\IdeaProjects\\Snake2\\src\\20241024_092642.png", Juego.WIDTH, Juego.HEIGHT);
         timer = new Timer(Juego.SPEED, this);
         timer.start();
 
@@ -37,7 +37,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
     private void inicializarJuego() {
         serpiente = new Serpiente(new Point(Juego.WIDTH / 2, Juego.HEIGHT / 2), Color.BLACK);
-        comida = new Comida(Color.RED, Juego.WIDTH, Juego.HEIGHT);
+        comida = new Comida(Color.RED, "C:\\Users\\alu603\\IdeaProjects\\Snake2\\src\\20241024_092642.png", Juego.WIDTH, Juego.HEIGHT);
         puntaje = 0;
         gameOver = false;
     }
