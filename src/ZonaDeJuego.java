@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class ZonaDeJuego extends JPanel implements ActionListener {
     private Serpiente serpiente;
@@ -8,6 +9,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private int puntaje;
     private boolean gameOver;
     private final Timer timer;
+    private String habilidadActual;
 
     public ZonaDeJuego() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
@@ -18,6 +20,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
         timer = new Timer(Juego.SPEED, this);
         timer.start();
+        // timer.setDelay();
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -54,21 +57,32 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         comida = new Comida(Color.RED, "src/cara1.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
         puntaje = 0;
         gameOver = false;
+        habilidadActual = "Ninguna";
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){ // por cada frame
         if (!gameOver) {
             serpiente.mover();
+            if (serpiente.checkColision(comida.getPosicion())){
+                Random random = new Random();
+                int habilidad = random.nextInt(4);
+                puntaje = serpiente.elegirHabilidad(habilidad, timer, puntaje);
 
-            if (serpiente.checkColision(comida.getPosicion())) {
-                serpiente.crecer();
+                switch (habilidad) {
+                    case 0 -> habilidadActual = "Aumentar Velocidad";
+                    case 1 -> habilidadActual = "Agregar Dos Partes";
+                    case 2 -> habilidadActual = "Decrecer";
+                    case 3 -> habilidadActual = "Invertir Dirección";
+                }
+
                 comida.spawn();
                 puntaje++;
             }
 
             if(serpiente.estaMuerta(Juego.WIDTH, Juego.HEIGHT, null)){
                 gameOver = true;
+                reset();
             }
             repaint();
         }
@@ -78,12 +92,14 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         inicializarJuego();
         repaint();
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         serpiente.render(g);
         comida.render(g);
         drawPuntaje(g);
+        drawHabilidad(g);
 
         if (gameOver) {
             drawGameOver(g);
@@ -99,5 +115,10 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         g.setColor(Color.RED);
         g.drawString("Game Over!", Juego.WIDTH / 2 - 50, Juego.HEIGHT / 2);
         g.drawString("Puntaje Final: " + puntaje, Juego.WIDTH / 2 - 60, Juego.HEIGHT / 2 + 20);
+    }
+
+    private void drawHabilidad(Graphics g){
+        g.setColor(Color.BLUE);
+        g.drawString("Habilidad Activada: " + habilidadActual, 10, 30);
     }
 }
