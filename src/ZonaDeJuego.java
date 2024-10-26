@@ -7,6 +7,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private Comida comida;
     private int puntaje;
     private boolean gameOver;
+    private final Timer timer;
 
     public ZonaDeJuego() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
@@ -14,6 +15,9 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         setFocusable(true);
 
         inicializarJuego();
+
+        timer = new Timer(Juego.SPEED, this);
+        timer.start();
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -47,7 +51,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
     private void inicializarJuego() {
         serpiente = new Serpiente(new Point(Juego.WIDTH / 2, Juego.HEIGHT / 2), Color.BLACK);
-        comida = new Comida(Color.RED, "20241024_092642.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
+        comida = new Comida(Color.RED, "src/cara1.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
         puntaje = 0;
         gameOver = false;
     }
