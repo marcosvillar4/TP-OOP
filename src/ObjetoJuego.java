@@ -13,5 +13,17 @@ public abstract class ObjetoJuego {
         return posicion;
     }
 
+    public void setPosicion(Point posicion) {
+        this.posicion = posicion;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public abstract void render(Graphics g);
 }

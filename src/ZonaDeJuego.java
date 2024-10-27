@@ -8,12 +8,13 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private Comida comida;
     private int puntaje;
     private boolean gameOver;
+    private boolean conExcepcion;
     private final Timer timer;
     private String habilidadActual;
-
+    private JButton resetButton;
     public ZonaDeJuego() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
-        // setBackground(Color.BLACK);
+        setBackground(Color.WHITE);
         setFocusable(true);
 
         inicializarJuego();
@@ -57,38 +58,54 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         comida = new Comida(Color.RED, "src/cara1.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
         puntaje = 0;
         gameOver = false;
+        conExcepcion = false;
         habilidadActual = "Ninguna";
+        resetButton = new JButton("¿Reiniciar?");
+        resetButton.setBounds(Juego.WIDTH / 2 - 60, Juego.HEIGHT / 2 + 40, 120, 30);
+        resetButton.setFocusable(false);
+        resetButton.setVisible(false);
+        resetButton.addActionListener(e -> reset());
+
+        setLayout(null);
+        add(resetButton);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){ // por cada frame
-        if (!gameOver) {
-            serpiente.mover();
-            if (serpiente.checkColision(comida.getPosicion())){
-                Random random = new Random();
-                int habilidad = random.nextInt(4);
-                puntaje = serpiente.elegirHabilidad(habilidad, timer, puntaje);
+    public void actionPerformed(ActionEvent e) throws NoMasPartesException{ // por cada frame
+        try{
+            if (!gameOver) {
+                serpiente.mover();
+                if (serpiente.checkColision(comida.getPosicion())){
+                    Random random = new Random();
+                    int habilidad = random.nextInt(5);
+                    puntaje = serpiente.elegirHabilidad(habilidad, timer, puntaje);
 
-                switch (habilidad) {
-                    case 0 -> habilidadActual = "Aumentar Velocidad";
-                    case 1 -> habilidadActual = "Agregar Dos Partes";
-                    case 2 -> habilidadActual = "Decrecer";
-                    case 3 -> habilidadActual = "Invertir Dirección";
+                    switch (habilidad) {
+                        case 0 -> habilidadActual = "Aumentar Velocidad";
+                        case 1 -> habilidadActual = "Agregar Dos Partes";
+                        case 2 -> habilidadActual = "Decrecer";
+                        case 3 -> habilidadActual = "Invertir Dirección";
+                    }
+
+                    comida.spawn();
+                    puntaje++;
                 }
 
-                comida.spawn();
-                puntaje++;
+                if(serpiente.estaMuerta(Juego.WIDTH, Juego.HEIGHT, null)){
+                    gameOver = true;
+                }
             }
-
-            if(serpiente.estaMuerta(Juego.WIDTH, Juego.HEIGHT, null)){
-                gameOver = true;
-                reset();
-            }
+        } catch (NoMasPartesException ex) {
+            gameOver = true;
+            conExcepcion = true;
+        } finally {
             repaint();
         }
+
     }
 
     private void reset(){
+        resetButton.setVisible(false);
         inicializarJuego();
         repaint();
     }
@@ -102,7 +119,8 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         drawHabilidad(g);
 
         if (gameOver) {
-            drawGameOver(g);
+            resetButton.setVisible(true);
+            drawGameOver(g, conExcepcion);
         }
     }
 
@@ -111,8 +129,14 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         g.drawString("Puntaje: " + puntaje, 10, 10);
     }
 
-    private void drawGameOver(Graphics g) {
+    private void drawGameOver(Graphics g, boolean conExcepcion) {
         g.setColor(Color.RED);
+        if (conExcepcion){
+            serpiente.setColor(Color.WHITE);
+            serpiente.render(g);
+            g.setColor(Color.RED);
+            g.drawString("¡Ups...! ¡La serpiente se quedo sin partes!", Juego.WIDTH / 2 - 130, Juego.HEIGHT / 2 - 40);
+        }
         g.drawString("Game Over!", Juego.WIDTH / 2 - 50, Juego.HEIGHT / 2);
         g.drawString("Puntaje Final: " + puntaje, Juego.WIDTH / 2 - 60, Juego.HEIGHT / 2 + 20);
     }

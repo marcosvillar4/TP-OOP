@@ -3,8 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
-
+import java.util.Collections;
 
 public class Serpiente extends ObjetoJuego implements Habilidades {
     private final ArrayList<Point> cuerpo;
@@ -67,15 +66,21 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         switch (n){
             case 0:
                 aumentarVelocidad(timer);
+                crecer();
                 break;
             case 1:
                 puntaje = agregarDosPartes(puntaje);
                 break;
             case 2:
-                decrecer();
+                if(this.getCuerpo().size() > 1){
+                    decrecer();
+                } else {
+                    throw new NoMasPartesException("¡Ups...! ¡La serpiente se quedo sin partes!");
+                }
                 break;
             case 3:
                 invertirDireccion();
+                crecer();
                 break;
             default:
                 crecer();
@@ -108,7 +113,7 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     }
 
     public void decrecer(){
-        cuerpo.removeLast(); // HACER EXCEPCION
+        cuerpo.removeLast();
     }
 
     // public void funnyCommand(){
@@ -116,9 +121,20 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     // }
 
     public void invertirDireccion(){
-        Point cabeza = cuerpo.getLast();
-        Point newCabeza = new Point(cabeza);
-        this.direccion= Direccion.IZQUIERDA;
+        Collections.reverse(cuerpo);
+
+        Point cabeza = cuerpo.getFirst();
+        Point segundoSegmento = cuerpo.getLast();
+
+        if (segundoSegmento.x > cabeza.x) {
+            this.direccion = Direccion.IZQUIERDA;
+        } else if (segundoSegmento.x < cabeza.x) {
+            this.direccion = Direccion.DERECHA;
+        } else if (segundoSegmento.y > cabeza.y) {
+            this.direccion = Direccion.ARRIBA;
+        } else if (segundoSegmento.y < cabeza.y) {
+            this.direccion = Direccion.ABAJO;
+        }
     }
 
     @Override
@@ -126,8 +142,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         for (Point p : cuerpo) {
             g.setColor(color);
             g.fillRect(p.x, p.y, Juego.BLOCK_SIZE, Juego.BLOCK_SIZE);
-            g.setColor(Color.BLACK);
-            g.fillRect(p.x + 4, p.y + 4, Juego.BLOCK_SIZE - 8, Juego.BLOCK_SIZE - 8);
         }
     }
 
@@ -135,6 +149,7 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
+
 
     public ArrayList<Point> getCuerpo() {
         return cuerpo;
