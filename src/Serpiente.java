@@ -10,6 +10,10 @@ import java.util.Random;
 public class Serpiente extends ObjetoJuego implements Habilidades {
     private final ArrayList<Point> cuerpo;
     private Direccion direccion;
+    private final boolean FUNNY_ENABLED = false;
+
+
+
 
     public Serpiente(Point startPos, Color color) {
         super(startPos, color);
@@ -85,7 +89,9 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
                 crecer();
                 break;
             case 4:
-                funnyCommand();
+                if (FUNNY_ENABLED) {
+                    funnyCommand();
+                }
             default:
                 crecer();
                 break;

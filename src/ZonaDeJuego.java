@@ -22,7 +22,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         setBackground(Color.LIGHT_GRAY);
         setFocusable(true);
 
-        lines = Juego.fileManager.readFile("puntajes.txt");
+        //lines = Juego.fileManager.readFile("puntajes.txt");
 
 
 
@@ -77,16 +77,6 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         resetButton.setVisible(false);
         resetButton.addActionListener(e -> reset());
 
-
-        puntuacionesBox = new JList();
-        puntuacionesBox.setBounds(Juego.WIDTH / 2 - 80, Juego.HEIGHT / 2 + 40, 120, 300);
-
-
-        for (MouseListener mouseListener : puntuacionesBox.getMouseListeners()) {
-            puntuacionesBox.removeMouseListener(mouseListener);
-        }
-
-
         setLayout(null);
         add(resetButton);
     }
@@ -115,6 +105,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
 
                 if(serpiente.estaMuerta(Juego.WIDTH, Juego.HEIGHT, null)){
                     gameOver = true;
+                    endGame();
                 }
             }
         } catch (NoMasPartesException ex) {
@@ -141,12 +132,15 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         comida.render(g);
         Renderizado.drawPuntaje(g, puntaje);
         Renderizado.drawHabilidad(g, habilidadActual);
-
-        if (gameOver) {
-            resetButton.setVisible(true);
+        if (gameOver){
             Renderizado.drawGameOver(g, serpiente, puntaje, conExcepcion);
-            Juego.fileManager.writeFile(Juego.fd, "Puntuacion A: " + puntaje);
         }
+    }
+
+    private void endGame(){
+        System.out.println("AAAAAAAAA");
+        resetButton.setVisible(true);
+        Juego.fileManager.append(Juego.fd, "DDDDDDDDDD");
     }
 
 

@@ -1,43 +1,1 @@
-import java.io.*;
-import java.util.ArrayList;
-
-public class FileManager {
-    private String filePath;
-    public FileManager(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void writeFile(String filePath, String content){
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter("puntajes.txt"));
-            if (content != null){
-                ArrayList<String> temp = readFile(filePath);
-                StringBuilder prevContent = new StringBuilder();
-                for (String s : temp) {
-                    prevContent.append(s);
-                }
-                writer.write( prevContent + ";\n" + content + ";\n");
-                writer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ArrayList<String> readFile(String filePath){
-        ArrayList<String> puntajes = new ArrayList<>();
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader("puntajes.txt"));
-            String line;
-            while((line = reader.readLine()) != null){
-                puntajes.add(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Archivo no existe. Creando archivo...");
-            writeFile(filePath, null);
-        } finally {
-            System.out.println("Archivo leido");
-            return puntajes;
-        }
-    }
-}
+import java.io.*;import java.util.ArrayList;public class FileManager {    private String filePath;    public FileManager(String filePath) {        this.filePath = filePath;    }    public void writeFile(String filePath, String content){        try{            BufferedWriter writer = new BufferedWriter(new FileWriter("puntajes.txt"));            if (content != null){                writer.write(content + ";\n");                writer.close();            }        } catch (IOException e) {            e.printStackTrace();        }    }    public ArrayList<String> readFile(String filePath){        ArrayList<String> puntajes = new ArrayList<>();        try{            BufferedReader reader = new BufferedReader(new FileReader("puntajes.txt"));            String line;            while((line = reader.readLine()) != null){                puntajes.add(line);            }            reader.close();        } catch (IOException e) {            System.out.println("Archivo no existe. Creando archivo...");            //writeFile(filePath, null);        } finally {            System.out.println("Archivo leido");        }        return puntajes;    }    public void append(String filePath, String content){        try {            ArrayList<String> fileContents = readFile(filePath);            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));            String fileString = "";            for (String fileContent : fileContents) {                fileString = fileString + fileContent + "\n";            }            fileString = fileString + content + "\n";            writer.write(fileString);            System.out.println(fileString); // DEBUG PRINT PARA FILE            writer.close();        } catch (IOException e) {            throw new RuntimeException(e);        }    }}
