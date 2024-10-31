@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ZonaDeJuego extends JPanel implements ActionListener {
@@ -13,10 +14,14 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private final Timer timer;
     private String habilidadActual;
     private JButton resetButton;
+    private ArrayList<String> lines;
+
     public ZonaDeJuego() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
         setBackground(Color.LIGHT_GRAY);
         setFocusable(true);
+
+        lines = Juego.fileManager.readFile("puntajes.txt");
 
         inicializarJuego();
 
@@ -120,34 +125,14 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         super.paintComponent(g);
         serpiente.render(g);
         comida.render(g);
-        drawPuntaje(g);
-        drawHabilidad(g);
+        Renderizado.drawPuntaje(g, puntaje);
+        Renderizado.drawHabilidad(g, habilidadActual);
 
         if (gameOver) {
             resetButton.setVisible(true);
-            drawGameOver(g, conExcepcion);
+            Renderizado.drawGameOver(g, serpiente, puntaje, conExcepcion);
         }
     }
 
-    private void drawPuntaje(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.drawString("Puntaje: " + puntaje, 10, 20);
-    }
 
-    private void drawGameOver(Graphics g, boolean conExcepcion) {
-        g.setColor(Color.RED);
-        if (conExcepcion){
-            serpiente.setColor(Color.WHITE);
-            serpiente.render(g);
-            g.setColor(Color.RED);
-            g.drawString("¡Ups...! ¡La serpiente se quedo sin partes!", Juego.WIDTH / 2 - 130, Juego.HEIGHT / 2 - 40);
-        }
-        g.drawString("Game Over!", Juego.WIDTH / 2 - 50, Juego.HEIGHT / 2);
-        g.drawString("Puntaje Final: " + puntaje, Juego.WIDTH / 2 - 60, Juego.HEIGHT / 2 + 20);
-    }
-
-    private void drawHabilidad(Graphics g){
-        g.setColor(Color.BLUE);
-        g.drawString("Habilidad Activada: " + habilidadActual, 10, 40);
-    }
 }
