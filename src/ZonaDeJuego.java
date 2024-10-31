@@ -14,6 +14,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
     private final Timer timer;
     private String habilidadActual;
     private JButton resetButton;
+    private JList puntuacionesBox;
     private ArrayList<String> lines;
 
     public ZonaDeJuego() {
@@ -22,6 +23,9 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         setFocusable(true);
 
         lines = Juego.fileManager.readFile("puntajes.txt");
+
+
+
 
         inicializarJuego();
 
@@ -72,6 +76,16 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         resetButton.setFocusable(false);
         resetButton.setVisible(false);
         resetButton.addActionListener(e -> reset());
+
+
+        puntuacionesBox = new JList();
+        puntuacionesBox.setBounds(Juego.WIDTH / 2 - 80, Juego.HEIGHT / 2 + 40, 120, 300);
+
+
+        for (MouseListener mouseListener : puntuacionesBox.getMouseListeners()) {
+            puntuacionesBox.removeMouseListener(mouseListener);
+        }
+
 
         setLayout(null);
         add(resetButton);
@@ -131,6 +145,7 @@ public class ZonaDeJuego extends JPanel implements ActionListener {
         if (gameOver) {
             resetButton.setVisible(true);
             Renderizado.drawGameOver(g, serpiente, puntaje, conExcepcion);
+            Juego.fileManager.writeFile(Juego.fd, "Puntuacion A: " + puntaje);
         }
     }
 

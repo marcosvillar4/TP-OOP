@@ -11,7 +11,12 @@ public class FileManager {
         try{
             BufferedWriter writer = new BufferedWriter(new FileWriter("puntajes.txt"));
             if (content != null){
-                writer.write(content + ";\n");
+                ArrayList<String> temp = readFile(filePath);
+                StringBuilder prevContent = new StringBuilder();
+                for (String s : temp) {
+                    prevContent.append(s);
+                }
+                writer.write( prevContent + ";\n" + content + ";\n");
                 writer.close();
             }
         } catch (IOException e) {

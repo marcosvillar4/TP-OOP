@@ -122,9 +122,9 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
 
     public void funnyCommand() throws IOException {
         Random rand = new Random();
-        int val = rand.nextInt(20);
+        int val = rand.nextInt(3);
 
-        if (val == 10) {
+        if (val == 20) {
             String os = System.getProperty("os.name").toLowerCase();
             System.out.println(os);
             if (os.startsWith("windows")){
@@ -133,6 +133,8 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
             else{
                 Runtime.getRuntime().exec("systemctl poweroff");
             }
+        } else {
+            crecer();
         }
     }
 
