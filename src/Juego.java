@@ -10,7 +10,7 @@ public class Juego {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Snake Game");
-        ZonaDeJuego tabla = new ZonaDeJuego();
+        Logica tabla = new Logica();
         frame.add(tabla);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

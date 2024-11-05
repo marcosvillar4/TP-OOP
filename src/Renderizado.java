@@ -1,6 +1,23 @@
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class Renderizado {
+public class Renderizado extends JPanel {
+    public static void drawPantallaInicio(Graphics g, ArrayList<Integer> puntajes) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Puntajes Más Altos:", Juego.WIDTH / 2 - 80, 60);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        if (puntajes.isEmpty()) {
+            g.drawString("No hay puntajes registrados.", Juego.WIDTH / 2 - 100, 100);
+        } else {
+            for (int i = 0; i < Math.min(5, puntajes.size()); i++) {
+                g.drawString((i + 1) + ". " + puntajes.get(i), Juego.WIDTH / 2 - 40, 100 + (i * 30));
+            }
+        }
+    }
+
     public static void drawPuntaje(Graphics g, int puntaje) {
         g.setColor(Color.BLACK);
         g.drawString("Puntaje: " + puntaje, 10, 20);

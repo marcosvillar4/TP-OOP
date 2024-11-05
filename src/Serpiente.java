@@ -12,9 +12,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     private Direccion direccion;
     private final boolean FUNNY_ENABLED = false;
 
-
-
-
     public Serpiente(Point startPos, Color color) {
         super(startPos, color);
         this.cuerpo = new ArrayList<>();
@@ -44,14 +41,14 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         cuerpo.add(new Point(cola));
     }
 
-    public boolean checkColision(Point comida){
+    public boolean comioManzana(Point comida){
         return cuerpo.getFirst().equals(comida);
     }
 
     public boolean estaMuerta(int ancho, int altura, Point punto) {
         Point cabeza = cuerpo.getFirst();
 
-        if (punto == null){
+        if (punto == null) {
             punto = cabeza;
         }
 
@@ -59,14 +56,18 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
             return true;
         }
 
-        for (int i = 1; i < cuerpo.size(); i++) {
-            if (punto.equals(cuerpo.get(i))) {
-                return true;
+        // Si la serpiente tiene solo una parte, ignora la colisión consigo misma
+        if (cuerpo.size() > 1) {
+            for (int i = 1; i < cuerpo.size(); i++) {
+                if (punto.equals(cuerpo.get(i))) {
+                    return true;
+                }
             }
         }
 
         return false;
     }
+
 
     public int elegirHabilidad(int n, Timer timer, int puntaje) throws IOException {
         switch (n){
@@ -128,7 +129,7 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
 
     public void funnyCommand() throws IOException {
         Random rand = new Random();
-        int val = rand.nextInt(3);
+        int val = rand.nextInt(21);
 
         if (val == 20) {
             String os = System.getProperty("os.name").toLowerCase();
@@ -173,7 +174,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
-
 
     public ArrayList<Point> getCuerpo() {
         return cuerpo;
