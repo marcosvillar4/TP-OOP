@@ -128,10 +128,8 @@ public class Logica extends JPanel implements ActionListener {
                     serpiente.mover();
                     if (serpiente.comioManzana(comida.getPosicion())){
                         Random random = new Random();
-                        int habilidad = random.nextInt(5);
-                        if (serpiente.getCuerpo().indexOf(serpiente.getCuerpo().getLast()) == 0){
-                            habilidad = 1;
-                        }
+                        int habilidad = random.nextInt(5); // 2;
+
 
                         puntaje = serpiente.elegirHabilidad(habilidad, timer, puntaje);
 
@@ -188,6 +186,6 @@ public class Logica extends JPanel implements ActionListener {
 
     private void endGame() {
         resetButton.setVisible(true);
-        Juego.fileManager.append(Juego.fd, String.valueOf(puntaje));
+        Juego.fileManager.writeFile(Juego.fd, String.valueOf(puntaje));
     }
 }
