@@ -12,6 +12,8 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     private Direccion direccion;
     private final boolean FUNNY_ENABLED = false;
 
+    private Timer resetTimer;
+
     public Serpiente(Point startPos, Color color) {
         super(startPos, color);
         this.cuerpo = new ArrayList<>();
@@ -56,7 +58,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
             return true;
         }
 
-        // Si la serpiente tiene solo una parte, ignora la colisión consigo misma
         if (cuerpo.size() > 1) {
             for (int i = 1; i < cuerpo.size(); i++) {
                 if (punto.equals(cuerpo.get(i))) {
@@ -100,12 +101,17 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         return puntaje;
     }
 
-    public void aumentarVelocidad(Timer timer){
-        int velocidadOriginal = timer.getDelay();
+    public void aumentarVelocidad(Timer timer) {
+        if (resetTimer != null && resetTimer.isRunning()) {
+            timer.setDelay(100);
+            resetTimer.stop();
+        }
+
+        int velocidadOriginal = 100;
 
         timer.setDelay(40);
 
-        Timer resetTimer = new Timer(3000, new ActionListener() {
+        resetTimer = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 timer.setDelay(velocidadOriginal);
@@ -116,7 +122,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         resetTimer.setRepeats(false);
         resetTimer.start();
     }
-
     public int agregarDosPartes(int puntaje){
         crecer();
         crecer();
