@@ -40,6 +40,7 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
 
     public void crecer() {
         Point cola = cuerpo.getLast();
+        System.out.println(cola);
         cuerpo.add(new Point(cola));
     }
 
@@ -58,9 +59,10 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
             return true;
         }
 
-        if (cuerpo.size() > 1) {
+        if (cuerpo.size() > 2) {
             for (int i = 1; i < cuerpo.size(); i++) {
                 if (punto.equals(cuerpo.get(i))) {
+                    System.out.println("if number 2");
                     return true;
                 }
             }
@@ -77,7 +79,11 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
                 crecer();
                 break;
             case 1:
-                puntaje = agregarDosPartes(puntaje);
+                if (this.getCuerpo().size() > 1){
+                    puntaje = agregarDosPartes(puntaje);
+                } else {
+                    crecer();
+                }
                 break;
             case 2:
                 if(this.getCuerpo().size() > 1){
