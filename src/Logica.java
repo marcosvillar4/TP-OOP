@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -19,10 +20,7 @@ public class Logica extends JPanel implements ActionListener {
     private boolean pantallaInicio;
     private ArrayList<Integer> puntajes;
 
-    /*
-    * BUGS A CORREGIR
-    * 1. Cuando la serpiente tiene solo 1 parte (la cabeza), cualquier habilidad la hace perder
-    */
+    private ArrayList<Color> colores = new ArrayList<>();
 
     public Logica() {
         setPreferredSize(new Dimension(Juego.WIDTH, Juego.HEIGHT));
@@ -32,6 +30,8 @@ public class Logica extends JPanel implements ActionListener {
         puntajes = cargarPuntajes();
 
         inicializarPantallaInicio();
+
+        colores = new ArrayList<>(Arrays.asList(Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.MAGENTA));
 
         timer = new Timer(Juego.SPEED, this);
         timer.start();
@@ -103,7 +103,7 @@ public class Logica extends JPanel implements ActionListener {
 
     private void inicializarJuego() {
         serpiente = new Serpiente(new Point(Juego.WIDTH / 2, Juego.HEIGHT / 2), Color.BLACK);
-        comida = new Comida(Color.RED, "src/cara1.png", Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
+        comida = new Comida(Color.RED, new ArrayList<>(Arrays.asList("src/cara1.png", "src/cara2.png", "src/cara3.png", "src/cara4.png", "src/cara5.png")), Juego.WIDTH, Juego.HEIGHT, serpiente.getCuerpo());
 
         puntaje = 0;
         gameOver = false;
@@ -140,7 +140,7 @@ public class Logica extends JPanel implements ActionListener {
                             case 3 -> habilidadActual = "Invertir Dirección";
                             case 4 -> habilidadActual = "???";
                         }
-
+                        serpiente.setColor(colores.get(random.nextInt(colores.size())));
                         comida.spawn();
                         puntaje++;
                     }
