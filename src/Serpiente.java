@@ -181,7 +181,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         }
     }
 
-
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
