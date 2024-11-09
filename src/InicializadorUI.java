@@ -1,10 +1,10 @@
 import javax.swing.JButton;
 
-public class UIInitializer {
+public class InicializadorUI {
     private JButton startButton;
     private JButton resetButton;
 
-    public UIInitializer(Logica logica) {
+    public InicializadorUI(Logica logica) {
         initializeStartButton(logica);
         initializeResetButton(logica);
     }

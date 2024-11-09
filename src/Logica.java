@@ -18,7 +18,7 @@ public class Logica extends JPanel implements ActionListener {
     private boolean pantallaInicio;
     private ArrayList<Integer> puntajes;
     private final FileManager fileManager;
-    private final UIInitializer inicializadorUI;
+    private final InicializadorUI inicializadorUI;
     private ArrayList<Color> colores = new ArrayList<>();
 
     public Logica(FileManager fileManager) {
@@ -29,7 +29,7 @@ public class Logica extends JPanel implements ActionListener {
 
         puntajes = cargarPuntajes();
 
-        inicializadorUI = new UIInitializer(this);
+        inicializadorUI = new InicializadorUI(this);
         inicializarPantallaInicio();
 
         colores = new ArrayList<>(Arrays.asList(Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.MAGENTA));
