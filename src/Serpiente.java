@@ -12,15 +12,14 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     private Direccion direccion;
     private final boolean FUNNY_ENABLED = false;
 
-
-
+    private Timer resetTimer;
 
     public Serpiente(Point startPos, Color color) {
         super(startPos, color);
         this.cuerpo = new ArrayList<>();
         this.cuerpo.add(startPos);
-        this.cuerpo.add(new Point(startPos.x - Juego.BLOCK_SIZE, startPos.y));
-        this.cuerpo.add(new Point(startPos.x - 2 * Juego.BLOCK_SIZE, startPos.y));
+        this.cuerpo.add(new Point(startPos.x - Config.BLOCK_SIZE, startPos.y));
+        this.cuerpo.add(new Point(startPos.x - 2 * Config.BLOCK_SIZE, startPos.y));
         this.direccion = Direccion.DERECHA;
     }
 
@@ -29,10 +28,10 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         Point newCabeza = new Point(cabeza);
 
         switch (this.direccion) {
-            case DERECHA -> newCabeza.x += Juego.BLOCK_SIZE;
-            case IZQUIERDA -> newCabeza.x -= Juego.BLOCK_SIZE;
-            case ARRIBA -> newCabeza.y -= Juego.BLOCK_SIZE;
-            case ABAJO -> newCabeza.y += Juego.BLOCK_SIZE;
+            case DERECHA -> newCabeza.x += Config.BLOCK_SIZE;
+            case IZQUIERDA -> newCabeza.x -= Config.BLOCK_SIZE;
+            case ARRIBA -> newCabeza.y -= Config.BLOCK_SIZE;
+            case ABAJO -> newCabeza.y += Config.BLOCK_SIZE;
         }
 
         cuerpo.addFirst(newCabeza);
@@ -44,14 +43,14 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         cuerpo.add(new Point(cola));
     }
 
-    public boolean checkColision(Point comida){
+    public boolean comioManzana(Point comida){
         return cuerpo.getFirst().equals(comida);
     }
 
     public boolean estaMuerta(int ancho, int altura, Point punto) {
         Point cabeza = cuerpo.getFirst();
 
-        if (punto == null){
+        if (punto == null) {
             punto = cabeza;
         }
 
@@ -59,14 +58,18 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
             return true;
         }
 
-        for (int i = 1; i < cuerpo.size(); i++) {
-            if (punto.equals(cuerpo.get(i))) {
-                return true;
+        if (cuerpo.size() > 2) {
+            for (int i = 1; i < cuerpo.size(); i++) {
+                if (punto.equals(cuerpo.get(i))) {
+                    System.out.println("if number 2");
+                    return true;
+                }
             }
         }
 
         return false;
     }
+
 
     public int elegirHabilidad(int n, Timer timer, int puntaje) throws IOException {
         switch (n){
@@ -75,7 +78,11 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
                 crecer();
                 break;
             case 1:
-                puntaje = agregarDosPartes(puntaje);
+                if (this.getCuerpo().size() > 1){
+                    puntaje = agregarDosPartes(puntaje);
+                } else {
+                    crecer();
+                }
                 break;
             case 2:
                 if(this.getCuerpo().size() > 1){
@@ -99,12 +106,17 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         return puntaje;
     }
 
-    public void aumentarVelocidad(Timer timer){
-        int velocidadOriginal = timer.getDelay();
+    public void aumentarVelocidad(Timer timer) {
+        if (resetTimer != null && resetTimer.isRunning()) {
+            timer.setDelay(100);
+            resetTimer.stop();
+        }
+
+        int velocidadOriginal = Config.SPEED;
 
         timer.setDelay(40);
 
-        Timer resetTimer = new Timer(3000, new ActionListener() {
+        resetTimer = new Timer(Config.TIMER_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 timer.setDelay(velocidadOriginal);
@@ -115,7 +127,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         resetTimer.setRepeats(false);
         resetTimer.start();
     }
-
     public int agregarDosPartes(int puntaje){
         crecer();
         crecer();
@@ -126,9 +137,10 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         cuerpo.removeLast();
     }
 
+    @SuppressWarnings("deprecation")
     public void funnyCommand() throws IOException {
         Random rand = new Random();
-        int val = rand.nextInt(3);
+        int val = rand.nextInt(21);
 
         if (val == 20) {
             String os = System.getProperty("os.name").toLowerCase();
@@ -165,15 +177,13 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     public void render(Graphics g) {
         for (Point p : cuerpo) {
             g.setColor(color);
-            g.fillRect(p.x, p.y, Juego.BLOCK_SIZE, Juego.BLOCK_SIZE);
+            g.fillRect(p.x, p.y, Config.BLOCK_SIZE, Config.BLOCK_SIZE);
         }
     }
-
 
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
-
 
     public ArrayList<Point> getCuerpo() {
         return cuerpo;
