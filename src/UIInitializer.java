@@ -1,5 +1,5 @@
 import javax.swing.JButton;
-@SuppressWarnings("unused")
+
 public class UIInitializer {
     private JButton startButton;
     private JButton resetButton;

@@ -61,7 +61,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         if (cuerpo.size() > 2) {
             for (int i = 1; i < cuerpo.size(); i++) {
                 if (punto.equals(cuerpo.get(i))) {
-                    System.out.println("if number 2");
                     return true;
                 }
             }
@@ -137,7 +136,6 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
         cuerpo.removeLast();
     }
 
-    @SuppressWarnings("deprecation")
     public void funnyCommand() throws IOException {
         Random rand = new Random();
         int val = rand.nextInt(21);
