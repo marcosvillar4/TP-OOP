@@ -48,7 +48,7 @@ public class Logica extends JPanel implements ActionListener {
             try {
                 puntajes.add(Integer.parseInt(line));
             } catch (NumberFormatException ignored) {
-                System.out.println();
+
             }
         }
 

@@ -12,7 +12,7 @@ public class FileManager {
         try{
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
             if (content != null){
-                writer.write(content + ";\n");
+                writer.write(content + "\n");
                 writer.close();
             }
         } catch (IOException e) {
