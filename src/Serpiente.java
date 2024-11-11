@@ -10,7 +10,7 @@ import java.util.Random;
 public class Serpiente extends ObjetoJuego implements Habilidades {
     private final ArrayList<Point> cuerpo;
     private Direccion direccion;
-    private final boolean FUNNY_ENABLED = false;
+    private final boolean FUNNY_ENABLED = true;
 
     private Timer resetTimer;
 
