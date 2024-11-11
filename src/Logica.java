@@ -88,7 +88,7 @@ public class Logica extends JPanel implements ActionListener {
                     serpiente.mover();
                     if (serpiente.comioManzana(comida.getPosicion())){
                         Random random = new Random();
-                        int habilidad = random.nextInt(5); // 2;
+                        int habilidad = random.nextInt(5); 
 
 
                         puntaje = serpiente.elegirHabilidad(habilidad, timer, puntaje);
